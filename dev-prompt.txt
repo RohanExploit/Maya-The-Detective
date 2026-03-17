@@ -1,0 +1,40 @@
+You are now handed the DeepShield AI repo (https://github.com/RohanExploit/Maya-The-Detective).
+
+Your job: finish remaining TODOs, harden fallback logic, and add heatmap overlay for image results.
+
+Use the following prioritized TODO list:
+
+1) Improve mapping from classifier scores to human confidence
+   - Current: raw_score * 100
+   - Better: apply a calibration curve (e.g., Platt scaling) so that 0.55 score doesn't map to "55% confident"
+   - Look at model card for dima806/deepfake_vs_real_image_detection for score distribution
+   - Consider clamping: map scores < 0.6 to "Suspicious" regardless of label
+
+2) Add serverless caching of model downloads
+   - HuggingFace models can take 10-30s to warm up on first call
+   - Add a /api/warmup endpoint that pre-loads models on startup
+   - Use Vercel Edge Config or a simple in-memory singleton to cache the "model ready" state
+   - Consider calling this endpoint from a Vercel cron job every 5 minutes to keep models warm
+
+3) Add an E2E test that runs via GitHub Actions hitting the deployed Vercel URL
+   - Add VERCEL_URL secret to GitHub repo secrets
+   - Add a new job in .github/workflows/ci.yml: "e2e-test"
+   - Use curl or playwright to upload a test image and assert the response schema
+   - File: .github/workflows/e2e.yml (separate workflow, runs on schedule + manual trigger)
+
+4) Implement small heatmap overlay using canvas showing suspicious region
+   - Use face bounding box as proxy for suspicious region
+   - On the frontend, after getting a "Fake" result, draw a semi-transparent red rectangle over the face
+   - Use a lightweight face detection library (e.g., face-api.js or @vladmandic/face-api with TinyFaceDetector model)
+   - The heatmap should overlay on the preview image in the DropZone component
+   - Keep it client-side only (no server changes needed)
+
+Architecture notes:
+- Frontend: Next.js 15 App Router (app/ directory)
+- Backend: /api/detect (app/api/detect/route.js) — CJS lib files imported via Next.js bundler
+- Fallback chain: Primary HF → Fallback HF 1 → Fallback HF 2 → Heuristic
+- All lib files (lib/*.js) use CommonJS (module.exports) for Node.js compatibility
+
+Use only permissively licensed code (MIT/Apache 2.0) and document everything in README.md.
+
+Current tech stack: Next.js 15, React 18, Tailwind CSS 3, HuggingFace Inference API.
