@@ -3,6 +3,7 @@
 > **Hackathon pitch:** DeepShield AI is a production-ready, zero-infrastructure deepfake detector that analyzes images and audio in seconds. Built on HuggingFace's state-of-the-art Vision Transformer models with a bulletproof 3-tier fallback architecture, it *never crashes in a demo*. Upload → Analyze → Know the truth — all from a polished Next.js UI that runs 100% on Vercel's free tier.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FRohanExploit%2FMaya-The-Detective)
+[![launch with diploi badge](https://diploi.com/launch.svg)](https://diploi.com/launch/RohanExploit/Maya-The-Detective)
 
 ---
 
@@ -87,11 +88,24 @@ curl -X POST http://localhost:3000/api/detect \
 
 ---
 
-## ☁️ Deploy to Vercel
+## ☁️ Deployment
+
+### Option 1: Deploy with Diploi
+
+[![launch with diploi button](https://diploi.com/launch-big.svg)](https://diploi.com/launch/RohanExploit/Maya-The-Detective)
+
+1. Click the launch button above to create a new Diploi deployment
+2. Open the **Environment** tab and add `HF_API_KEY`
+3. Open the preview URL from your Diploi deployment page
+
+For more information, visit [diploi.com](https://diploi.com/).
+
+### Option 2: Deploy with Vercel
 
 See [deployment.md](deployment.md) for full instructions.
 
 Quick deploy:
+
 1. Fork this repo
 2. Import to [Vercel](https://vercel.com/new)
 3. Set `HF_API_KEY` in Environment Variables
